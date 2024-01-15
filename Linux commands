@@ -1,0 +1,26 @@
+//create ping version1.0
+ssh "myazureusername".org
+sudo apt update
+sudo apt upgrade
+mkdir -p ~/myprojects/docker-ubuntu-ping
+cd ~/myprojects/docker-ubuntu-ping
+printf "FROM ubuntu\nCMD "ping", "8.8.8.8", "-c", "5"\n" > Dockerfile
+printf 'ENTRYPOINT ["RUN apt-get update && \apt-get install -y iputils-ping"]\n' >> Dockerfile
+docker image build . -t ubuntu-ping:1.0
+docker run --name ping1 ubuntu-ping:1.0
+docker image tag ubuntu-ping:1.0 "mydockerhubusername"/ubuntu-ping:1.0
+docker login
+docker image push "mydockerhubusername"/ubuntu-ping:1.0
+docker logout
+
+//create ping version latest
+mkdir -p ~/myprojects/docker-ubuntu-ping
+cd ~/myprojects/docker-ubuntu-ping
+printf "FROM ubuntu\nCMD "ping", "8.8.8.8", "-c", "5"\n" > Dockerfile
+printf 'ENTRYPOINT ["RUN apt-get update && \apt-get install -y iputils-ping"]\n' >> Dockerfile
+docker image build . -t ubuntu-ping:latest
+docker run --name ping2 ubuntu-ping:latest
+docker image tag ubuntu-ping:latest "mydockerhubusername"/ubuntu-ping:latest
+docker login
+docker image push "mydockerhubusername"/ubuntu-ping:latest
+docker logout
